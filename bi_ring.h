@@ -11,8 +11,7 @@ private:
         Node *next;
         Node *previous;
     };
-    Node *start;
-    
+    Node *start; // front
 
 public:
     class iterator
@@ -27,8 +26,13 @@ public:
     bi_ring &operator=(const bi_ring &src);
     iterator push_front(const Key &key, const Info &info);
     iterator pop_front();
-    iterator insert(iterator position, ...);
-    iterator erase(iterator position);
+    iterator insertAtPos(iterator position, const Key &key, const Info &info);
+    iterator eraseAtPos(iterator position);
+    // bool addAtPos(const Key &key, const Info &info, int which);
+    // bool removeByKey(const Key &key, int which);
+    // bool getInfo(const Key &key, const Info &info, int which);
+    Iterator search(const Key &key, const Info &info, int which);
+    int getSize();
     // what else can be useful in such a collection?
     // use examples of additional functions to guide you in the interface design
 };
