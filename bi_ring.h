@@ -28,6 +28,7 @@ public:
     iterator pop_front();
     iterator insertAtPos(iterator position, const Key &key, const Info &info);
     iterator eraseAtPos(iterator position);
+    iterator searchKey(const Key &key);
     // bool addAtPos(const Key &key, const Info &info, int which);
     // bool removeByKey(const Key &key, int which);
     // bool getInfo(const Key &key, const Info &info, int which);
