@@ -363,7 +363,23 @@ public:
             cout << temp->key << " " << temp->info << endl;
         }
     }
-    friend ostream &operator<<(ostream &os, const Ring<Key, Info> &ringToPrint);
+    friend ostream &operator<<(ostream &os, const Ring<Key, Info> &ring)
+    {
+        if (ring.start == nullptr)
+            return os;
+
+        else
+        {
+            Node *temp = ring.start;
+            while (temp->next != ring.start)
+            {
+                os << temp->key << " " << temp->info << endl;
+                temp = temp->next;
+            }
+            os << temp->key << " " << temp->info << endl;
+            return os;
+        }
+    }
 
     iterator begin() const { return iterator(start); }
 };
