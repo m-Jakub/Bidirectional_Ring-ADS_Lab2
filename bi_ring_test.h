@@ -26,4 +26,4 @@ bool test_insert(bi_ring<int, string> ring);
 bool test_erase(bi_ring<int, string> ring);
 bool test_clear(bi_ring<int, string> ring);
 
-bool test_ostream_operator(bi_ring<int, string> ring);
+void test_ostream_operator(bi_ring<int, string> ring);

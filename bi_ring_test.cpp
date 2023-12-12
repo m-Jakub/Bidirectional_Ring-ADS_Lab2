@@ -1,6 +1,7 @@
 #include "bi_ring.h"
 #include "bi_ring_test.h"
 #include <iostream>
+#include <cassert>
 
 void fill_the_initial_ring(ring)
 {
@@ -344,7 +345,7 @@ bool test_pop_front(ring)
     }
 
     string info;
-    ring.getInfo(ring.begin()+3, info);
+    ring.getInfo(ring.begin() + 3, info);
     if (info != "five")
     {
         cout << "Test 4 in pop_front failed\n";
@@ -364,17 +365,126 @@ bool test_pop_back(ring)
         return false;
     }
 
+    if (ring.search(5, 1) != iterator())
+    {
+        cout << "Test 2 in pop_back failed\n";
+        return false;
+    }
+
+    pop_back();
+
+    if (ring.getSize() != 3)
+    {
+        cout << "Test 3 in pop_back failed\n";
+        return false;
+    }
+
+    string info;
+    ring.getInfo(ring.begin() + 2, info);
+
+    if (info != "three")
+    {
+        cout << "Test 4 in pop_back failed\n";
+        return false;
+    }
+
     return true;
 }
-bool test_insert(ring);
-bool test_erase(ring);
+bool test_insert(ring)
+{
+    cout << "===== insert test =====\n ";
+    bi_ring<int, string>::iterator it;
+    it = ring.insert(it, 1, "jeden");
+    it = ring.insert(it - 1, 2, "dwa");
+    it = ring.insert(it + 2, 3, "three");
 
-bool test_ostream_operator();
+    print(); // 1 one 2 dwa 1 jeden 2 two 3 three 3 three 4 four 5 five
+
+    if (ring.getSize() != 8)
+    {
+        cout << "Test 1 in insert failed\n";
+        return false;
+    }
+
+    string info;
+    it = getInfo(ring.begin() + 2, info);
+    if (info != "jeden")
+    {
+        cout << "Test 2 in insert failed\n";
+        return false;
+    }
+
+    if (ring.search(2, 3) != iterator())
+    {
+        cout << "Test 3 in insert failed\n";
+        return false;
+    }
+
+    return true;
+}
+bool test_erase(ring)
+{
+    cout << "===== erase test =====\n ";
+    bi_ring<int, string>::iterator it;
+    it = ring.erase(ring.begin() + 2);
+    it = ring.erase(it + 1);
+
+    print(); // 1 one 2 two 4 four
+
+    if (ring.getSize() != 3)
+    {
+        cout << "Test 1 in erase failed\n";
+        return false;
+    }
+
+    string info;
+    it = getInfo(ring.begin() + 1, info);
+    if (info != "two")
+    {
+        cout << "Test 2 in erase failed\n";
+        return false;
+    }
+
+    if (ring.search(4, 1) != begin()+2)
+    {
+        cout << "Test 3 in erase failed\n";
+        return false;
+    }
+    
+    return true;
+}
+
+void test_ostream_operator()
+{
+    cout << "===== ostream operator test =====\n ";
+    cout << ring;
+}
 
 int main()
 {
 
     bi_ring<int, string> ring;
 
+    fill_the_initial_ring(ring);
+
+    assert(test_copy_constructor(ring));
+    assert(test_assignment_operator(ring));
+    
+    assert(test_getInfo(ring));
+    assert(test_search(ring));
+
+    assert(test_getSize(ring));
+    assert(test_isEmptyAndClear(ring));
+
+    assert(test_push_front(ring));
+    assert(test_push_back(ring));
+    assert(test_pop_front(ring));
+    assert(test_pop_back(ring));
+    assert(test_insert(ring));
+    assert(test_erase(ring));
+
+    test_ostream_operator(ring);
+   
+    cout << "\n\nAll tests passed\n";
     return 0;
 }
