@@ -1,7 +1,7 @@
 
 
 template <typename Key, typename Info>
-class Bi_ring // implemented as doubly linked list
+class bi_ring // implemented as doubly linked list
 {
 private:
     struct Node
@@ -15,66 +15,87 @@ private:
     int size;
 
 public:
-    class Iterator
+    class iterator
     {
     private:
         Node *owner;
-        Iterator(Node *start);
+        iterator(Node *start);
 
-        friend class Bi_ring<Key, Info>;
+        friend class bi_ring<Key, Info>;
 
     public:
+        iterator();
+        iterator(const iterator &src);
+        ~iterator();
 
-        Iterator();
-        Iterator(const Iterator &src);
-        ~Iterator();
+        iterator &operator=(const iterator &src);
 
-        Iterator &operator=(const Iterator &src);
+        bool operator==(const iterator &other) const;
+        bool operator!=(const iterator &other) const;
 
-        bool operator==(const Iterator &other) const;
-        bool operator!=(const Iterator &other) const;
+        iterator &operator++();
+        iterator operator++(int);
+        iterator &operator--();
+        iterator operator--(int);
+        iterator operator+(int n) const;
+        iterator operator-(int n) const;
+        iterator &operator+=(int n);
+        iterator &operator-=(int n);
 
-        Iterator &operator++();
-        Iterator operator++(int);
-        Iterator &operator--();
-        Iterator operator--(int);
-        Iterator operator+(int n) const;
-        Iterator operator-(int n) const;
-        Iterator &operator+=(int n);
-        Iterator &operator-=(int n);
-
-        Key &operator*() const;
-        Key *operator->() const;
-
-        bool empty() const { return owner == nullptr; }
-
-
-
+        Node &operator*() const;
+        Node *operator->() const;
     };
-    class Const_iterator
-    { /* … */
+    class const_iterator
+    {
+    private:
+        Node *owner;
+        const_iterator(Node *start);
+
+        friend class bi_ring<Key, Info>;
+
+    public:
+        const_iterator();
+        const_iterator(const const_iterator &src);
+        ~const_iterator();
+
+        const_iterator &operator=(const const_iterator &src);
+
+        bool operator==(const const_iterator &other) const;
+        bool operator!=(const const_iterator &other) const;
+
+        const_iterator &operator++();
+        const_iterator operator++(int);
+        const_iterator &operator--();
+        const_iterator operator--(int);
+        const_iterator operator+(int n) const;
+        const_iterator operator-(int n) const;
+        const_iterator &operator+=(int n);
+        const_iterator &operator-=(int n);
+
+        const Node &operator*() const;
+        const Node *operator->() const;
     };
 
-    Bi_ring();
-    Bi_ring(const Bi_ring &src);
-    ~Bi_ring();
+    bi_ring();
+    bi_ring(const bi_ring &src);
+    ~bi_ring();
 
-    Bi_ring &operator=(const Bi_ring &src);
+    bi_ring &operator=(const bi_ring &src);
 
-    bool getInfo(Iterator position, Info &info);
-    Iterator search(const Key &key, int which);
+    bool getInfo(iterator position, Info &info);
+    iterator search(const Key &key, int which);
 
-    int getSize() { return size; }
+    int size() const { return size; }
     bool empty() { return size == 0; }
 
-    Iterator push_front(const Key &key, const Info &info);
-    Iterator pop_front();
-    Iterator insert(Iterator position, const Key &key, const Info &info); // inserts after the given position
-    Iterator erase(Iterator position);
+    iterator push_front(const Key &key, const Info &info);
+    iterator pop_front();
+    iterator insert(iterator position, const Key &key, const Info &info); // inserts after the given position
+    iterator erase(iterator position);
     void clear();
 
     void print();
     friend ostream &operator<<(ostream &os, const Ring<Key, Info> &ringToPrint);
 
-    Iterator begin() { return Iterator(start); }
+    iterator begin() const { return iterator(start); }
 };
