@@ -14,105 +14,218 @@ private:
     Node *start; // front
     int size;
 
+    class iterator_base // Base class for iterator and const_iterator
+    {
+    protected:
+        Node *owner;
+        explicit iterator_base(Node *start) : owner(start) {} // Explicit keyword prevents implicit conversion from Node* to iterator_base, like e.g. iterator_base it = start; - will not compile
+
+    public:
+        iterator_base() : owner(nullptr) {}
+        iterator_base(const iterator_base &src) : owner(src.owner) {}
+        ~iterator_base() = default;
+
+        bool operator==(const iterator_base &other) const { return owner == other.owner; }
+        bool operator!=(const iterator_base &other) const { return owner != other.owner; }
+
+        iterator_base &operator++()
+        {
+            owner = owner->next;
+            return *this;
+        }
+        iterator_base operator++(int)
+        {
+            iterator_base temp = *this;
+            owner = owner->next;
+            return temp;
+        }
+        iterator_base &operator--()
+        {
+            owner = owner->previous;
+            return *this;
+        }
+        iterator_base operator--(int)
+        {
+            iterator_base temp = *this;
+            owner = owner->previous;
+            return temp;
+        }
+        iterator_base operator+(int n) const
+        {
+            iterator_base temp = *this;
+            for (int i = 0; i < n; i++)
+            {
+                temp.owner = temp.owner->next;
+            }
+            return temp;
+        }
+        iterator_base operator-(int n) const
+        {
+            iterator_base temp = *this;
+            for (int i = 0; i < n; i++)
+            {
+                temp.owner = temp.owner->previous;
+            }
+            return temp;
+        }
+        iterator_base &operator+=(int n)
+        {
+            for (int i = 0; i < n; i++)
+            {
+                owner = owner->next;
+            }
+            return *this;
+        }
+        iterator_base &operator-=(int n)
+        {
+            for (int i = 0; i < n; i++)
+            {
+                owner = owner->previous;
+            }
+            return *this;
+        }
+    };
+
 public:
-    class iterator
+    class iterator : public iterator_base
     {
     private:
-        Node *owner;
-        iterator(Node *start);
+        iterator(Node *start) : iterator_base(start) {}
 
         friend class bi_ring<Key, Info>;
 
     public:
-        iterator() { owner = nullptr;}
-        iterator(const iterator &src)
-        {
-            owner = src.owner;
-        }
-        ~iterator() {};
+        iterator() : iterator_base() {}
+        iterator(const iterator &src) : iterator_base(src.owner) {}
+        iterator(const const_iterator &src) : iterator_base(src.owner) {} // you can construct iterator from const_iterator and vice versa
+        ~iterator() = default;
 
         iterator &operator=(const iterator &src)
         {
             owner = src.owner;
             return *this;
         }
-
-        bool operator==(const iterator &other) const
+        iterator &operator=(const const_iterator &src)
         {
-            return owner == other.owner;
-        }
-        bool operator!=(const iterator &other) const
-        {
-            return owner != other.owner;
-        }
-
-        iterator &operator++()
-        {
-            owner = owner->next;
+            owner = src.owner;
             return *this;
         }
-        iterator operator++(int)
-        {
-            iterator temp = *this;
-            owner = owner->next;
-            return temp;
-        }
-        iterator &operator--()
-        {
-            owner = owner->previous;
-            return *this;
-        }
-        iterator operator--(int);
-        iterator operator+(int n) const;
-        iterator operator-(int n) const;
-        iterator &operator+=(int n);
-        iterator &operator-=(int n);
 
-        Node &operator*() const;
-        Node *operator->() const;
+        Node &operator*() const { return *owner; }
+        Node *operator->() const { return owner; }
     };
+
     class const_iterator
     {
     private:
-        Node *owner;
-        const_iterator(Node *start);
+        const Node *owner;
+        explicit const_iterator(const Node *start) : owner(start) {}
 
         friend class bi_ring<Key, Info>;
 
     public:
-        const_iterator() { owner = nullptr;}
-        const_iterator(const const_iterator &src);
-        ~const_iterator();
+        const_iterator() : owner(nullptr) {}
+        const_iterator(const const_iterator &src) : owner(src.owner) {}
+        const_iterator(const iterator &src) : owner(src.owner) {}
+        ~const_iterator() = default;
 
-        const_iterator &operator=(const const_iterator &src);
+        const_iterator &operator=(const const_iterator &src)
+        {
+            owner = src.owner;
+            return *this;
+        }
+        const_iterator &operator=(const iterator &src)
+        {
+            owner = src.owner;
+            return *this;
+        }
 
-        bool operator==(const const_iterator &other) const;
-        bool operator!=(const const_iterator &other) const;
-
-        const_iterator &operator++();
-        const_iterator operator++(int);
-        const_iterator &operator--();
-        const_iterator operator--(int);
-        const_iterator operator+(int n) const;
-        const_iterator operator-(int n) const;
-        const_iterator &operator+=(int n);
-        const_iterator &operator-=(int n);
-
-        const Node &operator*() const;
-        const Node *operator->() const;
+        const Node &operator*() const { return *owner; }
+        const Node *operator->() const { return owner; }
     };
 
-    bi_ring(){ start = nullptr; size = 0;};
+    bi_ring()
+    {
+        start = nullptr;
+        size = 0;
+    };
     bi_ring(const bi_ring &src)
     {
-        
+        if (src.start == nullptr)
+        {
+            start = nullptr;
+            size = 0;
+        }
+        else
+        {
+            Node *temp = src.start;
+            while (temp != src.start)
+            {
+                push_back(temp->key, temp->info);
+                temp = temp->next;
+            }
+            size = src.size;
+        }
     }
-    ~bi_ring();
+    ~bi_ring() { clear(); }
 
-    bi_ring &operator=(const bi_ring &src);
+    bi_ring &operator=(const bi_ring &src)
+    {
+        if (this == &src)
+            return *this;
 
-    bool getInfo(iterator position, Info &info);
-    iterator search(const Key &key, int which);
+        else
+        {
+            clear();
+            if (src.start == nullptr)
+            {
+                start = nullptr;
+                size = 0;
+            }
+            else
+            {
+                Node *temp = src.start;
+                while (temp != src.start)
+                {
+                    push_back(temp->key, temp->info);
+                    temp = temp->next;
+                }
+                size = src.size;
+            }
+            return *this;
+        }
+    }
+
+    bool getInfo(iterator position, Info &info) const
+    {
+        if (position == iterator())
+            return false;
+
+        else
+        {
+            info = position->info;
+            return true;
+        }
+    }
+    iterator search(const Key &key, int which)
+    {
+        if (start == nullptr)
+            return iterator();
+
+        else
+        {
+            Node *temp = start;
+            for (int i = 0; i < which; i++)
+            {
+                if (temp->key == key)
+                    return iterator(temp);
+
+                else
+                    temp = temp->next;
+            }
+            return iterator();
+        }
+    }
 
     int size() const { return size; }
     bool empty() { return size == 0; }
@@ -140,6 +253,28 @@ public:
         }
         return iterator(start);
     }
+    iterator push_back(const Key &key, const Info &info)
+    {
+        if (start == nullptr)
+        {
+            start = new Node;
+            start->key = key;
+            start->info = info;
+            start->next = start;
+            start->previous = start;
+        }
+        else
+        {
+            Node *newNode = new Node;
+            newNode->key = key;
+            newNode->info = info;
+            newNode->next = start;
+            newNode->previous = start->previous;
+            start->previous->next = newNode;
+            start->previous = newNode;
+        }
+        return iterator(start->previous);
+    }
     iterator pop_front()
     {
         if (start == nullptr)
@@ -164,12 +299,70 @@ public:
     }
     iterator insert(iterator position, const Key &key, const Info &info) // inserts after the given position
     {
+        if (position == iterator())
+            return iterator();
 
+        else
+        {
+            Node *newNode = new Node;
+            newNode->key = key;
+            newNode->info = info;
+            newNode->next = position->next;
+            newNode->previous = position->next->previous;
+            position->next->previous = newNode;
+            position->next = newNode;
+            return iterator(newNode);
+        }
     }
-    iterator erase(iterator position);
-    void clear();
+    iterator erase(iterator position)
+    {
+        if (position == iterator())
+            return iterator();
 
-    void print();
+        else
+        {
+            Node *temp = position->next;
+            position->previous->next = position->next;
+            position->next->previous = position->previous;
+            delete position;
+            return iterator(temp);
+        }
+    }
+    void clear()
+    {
+        if (start == nullptr)
+            return;
+
+        else
+        {
+            Node *temp = start;
+            while (temp->next != start)
+            {
+                temp = temp->next;
+                delete temp->previous;
+            }
+            delete temp;
+            start = nullptr;
+            size = 0;
+        }
+    }
+
+    void print()
+    {
+        if (start == nullptr)
+            return;
+
+        else
+        {
+            Node *temp = start;
+            while (temp->next != start)
+            {
+                cout << temp->key << " " << temp->info << endl;
+                temp = temp->next;
+            }
+            cout << temp->key << " " << temp->info << endl;
+        }
+    }
     friend ostream &operator<<(ostream &os, const Ring<Key, Info> &ringToPrint);
 
     iterator begin() const { return iterator(start); }
