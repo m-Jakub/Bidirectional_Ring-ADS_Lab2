@@ -215,14 +215,22 @@ public:
         else
         {
             Node *temp = start;
-            for (int i = 0; i < which; i++)
+            while (temp->next != start)
             {
                 if (temp->key == key)
+                    which--;
+
+                if (which == 0)
                     return iterator(temp);
 
-                else
-                    temp = temp->next;
+                temp = temp->next;
             }
+            if (temp->key == key)
+                which--;
+
+            if (which == 0)
+                return iterator(temp);
+
             return iterator();
         }
     }
@@ -412,4 +420,3 @@ public:
 
     iterator begin() const { return iterator(start); }
 };
-

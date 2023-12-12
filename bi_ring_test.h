@@ -5,7 +5,6 @@
 
 // fills the ring with some values to prepare it for further tests
 // that's why this function receives a reference to the ring
-// this function can be easily modified to test the bi_ring in different scenarios
 void fill_the_initial_ring(&bi_ring<int, string> ring);
 
 // other tests receive a copy of the ring
