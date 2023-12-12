@@ -1,0 +1,3 @@
+should there also be methods returning const_iterator in bi_ring class?
+
+should there be main function in bi_ring_tests.cpp?

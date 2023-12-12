@@ -227,8 +227,8 @@ public:
         }
     }
 
-    int size() const { return size; }
-    bool empty() { return size == 0; }
+    int getSize() const { return size; }
+    bool isEmpty() { return size == 0; }
 
     iterator push_front(const Key &key, const Info &info)
     {
@@ -251,6 +251,7 @@ public:
             start->previous = newNode;
             start = newNode;
         }
+        size++;
         return iterator(start);
     }
     iterator push_back(const Key &key, const Info &info)
@@ -273,6 +274,7 @@ public:
             start->previous->next = newNode;
             start->previous = newNode;
         }
+        size++;
         return iterator(start->previous);
     }
     iterator pop_front()
@@ -284,6 +286,7 @@ public:
         else if (start->next == start)
         {
             delete start;
+            size--;
             start = nullptr;
             return iterator();
         }
@@ -294,7 +297,31 @@ public:
             start->next->previous = start->previous;
             start = start->next;
             delete temp;
+            size--;
             return iterator(start);
+        }
+    }
+    iterator pop_back()
+    {
+        if (start == nullptr)
+        {
+            return iterator();
+        }
+        else if (start->next == start)
+        {
+            delete start;
+            size--;
+            start = nullptr;
+            return iterator();
+        }
+        else
+        {
+            Node *temp = start->previous;
+            start->previous->previous->next = start;
+            start->previous = start->previous->previous;
+            delete temp;
+            size--;
+            return iterator(start->previous);
         }
     }
     iterator insert(iterator position, const Key &key, const Info &info) // inserts after the given position
@@ -311,6 +338,7 @@ public:
             newNode->previous = position->next->previous;
             position->next->previous = newNode;
             position->next = newNode;
+            size++;
             return iterator(newNode);
         }
     }
@@ -325,6 +353,7 @@ public:
             position->previous->next = position->next;
             position->next->previous = position->previous;
             delete position;
+            size--;
             return iterator(temp);
         }
     }
@@ -383,3 +412,4 @@ public:
 
     iterator begin() const { return iterator(start); }
 };
+
