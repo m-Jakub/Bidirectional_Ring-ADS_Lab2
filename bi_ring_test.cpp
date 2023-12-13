@@ -2,6 +2,7 @@
 #include "bi_ring_test.h"
 #include <iostream>
 #include <cassert>
+#include <string>
 
 using namespace std;
 

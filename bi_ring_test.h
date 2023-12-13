@@ -8,7 +8,7 @@
 
 // fills the ring with some values to prepare it for further tests
 // that's why this function receives a reference to the ring
-void fill_the_initial_ring(bi_ring<int, string>);
+void fill_the_initial_ring(bi_ring<int, string>&);
 
 // other tests receive a copy of the ring
 // iterators are tested by using them inside the tests

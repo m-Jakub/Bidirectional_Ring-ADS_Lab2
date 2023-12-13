@@ -1,6 +1,9 @@
 #ifndef BI_RING_H
 #define BI_RING_H
 
+#include <iostream>
+#include <string>
+
 template <typename Key, typename Info>
 class bi_ring // implemented as doubly linked list
 {
@@ -91,6 +94,7 @@ public:
     class iterator
     {
     private:
+        Node *owner;
         iterator(Node *start) : owner(start) {}
 
         friend class bi_ring<Key, Info>;
@@ -179,6 +183,7 @@ public:
     class const_iterator
     {
     private:
+    Node *owner;
         const_iterator(Node *start) : owner(start) {}
 
         friend class bi_ring<Key, Info>;
