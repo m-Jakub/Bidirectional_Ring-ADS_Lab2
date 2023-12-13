@@ -192,7 +192,7 @@ public:
             owner = src.owner;
             return *this;
         }
-        const_iterator &operator=(const const_iterator &src)
+        const_iterator &operator=(const iterator &src)
         {
             owner = src.owner;
             return *this;
@@ -418,7 +418,7 @@ public:
             Node *temp = position->next;
             position->previous->next = position->next;
             position->next->previous = position->previous;
-            delete position;
+            delete *position;
             size--;
             return iterator(temp);
         }
@@ -458,7 +458,7 @@ public:
             cout << temp->key << " " << temp->info << endl;
         }
     }
-    friend ostream &operator<<(ostream &os, const Ring<Key, Info> &ring)
+    friend ostream &operator<<(ostream &os, const bi_ring<Key, Info> &ring)
     {
         if (ring.start == nullptr)
             return os;
