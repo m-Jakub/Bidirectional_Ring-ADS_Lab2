@@ -24,7 +24,7 @@ private:
 public:
     class iterator;
     class const_iterator;
-    
+
     class iterator
     {
     private:
@@ -117,7 +117,7 @@ public:
     class const_iterator
     {
     private:
-    Node *owner;
+        Node *owner;
         const_iterator(Node *start) : owner(start) {}
 
         friend class bi_ring<Key, Info>;
@@ -209,14 +209,13 @@ public:
     };
     bi_ring(const bi_ring &src)
     {
+        start = nullptr;
+        size = 0;
         if (src.start == nullptr)
         {
-            start = nullptr;
-            size = 0;
         }
         else
         {
-            clear();
             Node *temp = src.start;
             while (temp->next != src.start)
             {
@@ -227,7 +226,7 @@ public:
             size = src.size;
         }
     }
-    ~bi_ring() { clear(); }
+    ~bi_ring() {}
 
     bi_ring &operator=(const bi_ring &src)
     {
@@ -245,11 +244,12 @@ public:
             else
             {
                 Node *temp = src.start;
-                while (temp != src.start)
+                while (temp->next != src.start)
                 {
                     push_back(temp->key, temp->info);
                     temp = temp->next;
                 }
+                push_back(temp->key, temp->info);
                 size = src.size;
             }
             return *this;
