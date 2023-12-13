@@ -20,7 +20,7 @@ bool test_getInfo(bi_ring<int, string>);
 bool test_search(bi_ring<int, string>);
 
 bool test_getSize(bi_ring<int, string>);
-bool test_isEmpty(bi_ring<int, string>);
+bool test_isEmptyAndClear(bi_ring<int, string>);
 
 bool test_push_front(bi_ring<int, string>);
 bool test_push_back(bi_ring<int, string>);
@@ -28,7 +28,6 @@ bool test_pop_front(bi_ring<int, string>);
 bool test_pop_back(bi_ring<int, string>);
 bool test_insert(bi_ring<int, string>);
 bool test_erase(bi_ring<int, string>);
-bool test_clear(bi_ring<int, string>);
 
 void test_ostream_operator(bi_ring<int, string>);
 

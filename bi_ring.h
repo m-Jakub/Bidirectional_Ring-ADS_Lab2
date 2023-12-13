@@ -439,6 +439,7 @@ public:
             {
                 it = erase(it);
             }
+            start = nullptr;
         }
     }
 
