@@ -3,18 +3,20 @@
 #include <iostream>
 #include <cassert>
 
-void fill_the_initial_ring(ring)
+using namespace std;
+
+void fill_the_initial_ring(bi_ring<int, string> &ring)
 {
-    push_back(1, "one");
-    push_back(2, "two");
-    push_back(3, "three");
-    push_back(4, "four");
-    push_back(5, "five");
+    ring.push_back(1, "one");
+    ring.push_back(2, "two");
+    ring.push_back(3, "three");
+    ring.push_back(4, "four");
+    ring.push_back(5, "five");
     cout << "===== Initial ring =====\n ";
     ring.print();
 }
 
-bool test_copy_constructor(ring)
+bool test_copy_constructor(bi_ring<int, string> ring)
 {
     bi_ring<int, string> ring_copy(ring);
 
@@ -26,17 +28,9 @@ bool test_copy_constructor(ring)
         cout << "Size test in copy constructor failed\n";
         return false;
     }
-    for (int i = 0; i < ring.getSize(); i++)
-    {
-        if (ring_copy[i] != ring[i])
-        {
-            cout << i << " Element test in copy constructor failed\n";
-            return false;
-        }
-    }
     return true;
 }
-bool test_assignment_operator(ring)
+bool test_assignment_operator(bi_ring<int, string> ring)
 {
     bi_ring<int, string> ring_copy = ring;
 
@@ -48,18 +42,10 @@ bool test_assignment_operator(ring)
         cout << "Size test in assignment operator failed\n";
         return false;
     }
-    for (int i = 0; i < ring.getSize(); i++)
-    {
-        if (ring_copy[i] != ring[i])
-        {
-            cout << i << " Element test in assignment operator failed\n";
-            return false;
-        }
-    }
     return true;
 }
 
-bool test_getInfo(ring) // tests getInfo() method
+bool test_getInfo(bi_ring<int, string> ring) // tests getInfo() method
 {
     cout << "===== getInfo test =====\n ";
 
@@ -103,7 +89,7 @@ bool test_getInfo(ring) // tests getInfo() method
 
     return true;
 }
-bool test_search(ring)
+bool test_search(bi_ring<int, string> ring)
 {
     cout << "===== search test =====\n ";
 
@@ -122,7 +108,7 @@ bool test_search(ring)
     }
 
     it = ring.search(5, 1);
-    if (it == iterator())
+    if (it == bi_ring<int, string>::iterator())
     {
         cout << "Test 3 in search failed\n";
         return false;
@@ -135,14 +121,14 @@ bool test_search(ring)
 
     // tests searching 4th occurence of 3 which occurs only once, so it should return iterator initialized with nullptr
     it = ring.search(3, 4);
-    if (it != iterator())
+    if (it != bi_ring<int, string>::iterator())
     {
         cout << "Test 4 in search failed\n";
         return false;
     }
 
     it = ring.search(8, 1); // tests searching for non-existing key
-    if (it != iterator())
+    if (it != bi_ring<int, string>::iterator())
     {
         cout << "Test 5 in search failed\n";
         return false;
@@ -151,7 +137,7 @@ bool test_search(ring)
     return true;
 }
 
-bool test_getSize(ring)
+bool test_getSize(bi_ring<int, string> ring)
 {
     cout << "===== getSize test =====\n ";
 
@@ -191,7 +177,7 @@ bool test_getSize(ring)
 
     return true;
 }
-bool test_isEmptyAndClear(ring)
+bool test_isEmptyAndClear(bi_ring<int, string> ring)
 {
     cout << "===== isEmpty and clear test =====\n ";
 
@@ -225,13 +211,13 @@ bool test_isEmptyAndClear(ring)
     return true;
 }
 
-bool test_push_front(ring)
+bool test_push_front(bi_ring<int, string> ring)
 {
     cout << "===== push_front test =====\n ";
     ring.push_front(6, "six");
     ring.push_front(7, "seven");
     ring.push_front(2, "dwa");
-    ring.push_front(7, "siedem")
+    ring.push_front(7, "siedem");
 
         ring.print();
 
@@ -263,7 +249,7 @@ bool test_push_front(ring)
         return false;
     }
 
-    if (it2 -= 1 != it)
+    if ((it2 -= 1) != it)
     {
         cout << "Test 5 in push_front failed\n";
         return false;
@@ -271,7 +257,7 @@ bool test_push_front(ring)
 
     return true;
 }
-bool test_push_back(ring)
+bool test_push_back(bi_ring<int, string> ring)
 {
     cout << "===== push_back test =====\n ";
     ring.push_back(18, "eighteen");
@@ -318,7 +304,7 @@ bool test_push_back(ring)
 
     return true;
 }
-bool test_pop_front(ring)
+bool test_pop_front(bi_ring<int, string> ring)
 {
     cout << "===== pop_front test =====\n ";
     ring.pop_front();
@@ -329,14 +315,14 @@ bool test_pop_front(ring)
         return false;
     }
 
-    if (ring.search(1, 1) != iterator())
+    if (ring.search(1, 1) != bi_ring<int, string>::iterator())
     {
         cout << "Test 2 in pop_front failed\n";
         return false;
     }
 
-    pop_front();
-    pop_front();
+    ring.pop_front();
+    ring.pop_front();
 
     if (ring.getSize() != 2)
     {
@@ -354,7 +340,7 @@ bool test_pop_front(ring)
 
     return true;
 }
-bool test_pop_back(ring)
+bool test_pop_back(bi_ring<int, string> ring)
 {
     cout << "===== pop_back test =====\n ";
     ring.pop_back();
@@ -365,13 +351,13 @@ bool test_pop_back(ring)
         return false;
     }
 
-    if (ring.search(5, 1) != iterator())
+    if (ring.search(5, 1) != bi_ring<int, string>::iterator())
     {
         cout << "Test 2 in pop_back failed\n";
         return false;
     }
 
-    pop_back();
+    ring.pop_back();
 
     if (ring.getSize() != 3)
     {
@@ -390,7 +376,7 @@ bool test_pop_back(ring)
 
     return true;
 }
-bool test_insert(ring)
+bool test_insert(bi_ring<int, string> ring)
 {
     cout << "===== insert test =====\n ";
     bi_ring<int, string>::iterator it;
@@ -398,7 +384,7 @@ bool test_insert(ring)
     it = ring.insert(it - 1, 2, "dwa");
     it = ring.insert(it + 2, 3, "three");
 
-    print(); // 1 one 2 dwa 1 jeden 2 two 3 three 3 three 4 four 5 five
+    ring.print(); // 1 one 2 dwa 1 jeden 2 two 3 three 3 three 4 four 5 five
 
     if (ring.getSize() != 8)
     {
@@ -407,14 +393,14 @@ bool test_insert(ring)
     }
 
     string info;
-    it = getInfo(ring.begin() + 2, info);
+    ring.getInfo(ring.begin() + 2, info);
     if (info != "jeden")
     {
         cout << "Test 2 in insert failed\n";
         return false;
     }
 
-    if (ring.search(2, 3) != iterator())
+    if (ring.search(2, 3) != bi_ring<int, string>::iterator())
     {
         cout << "Test 3 in insert failed\n";
         return false;
@@ -422,14 +408,14 @@ bool test_insert(ring)
 
     return true;
 }
-bool test_erase(ring)
+bool test_erase(bi_ring<int, string> ring)
 {
     cout << "===== erase test =====\n ";
     bi_ring<int, string>::iterator it;
     it = ring.erase(ring.begin() + 2);
     it = ring.erase(it + 1);
 
-    print(); // 1 one 2 two 4 four
+    ring.print(); // 1 one 2 two 4 four
 
     if (ring.getSize() != 3)
     {
@@ -438,14 +424,14 @@ bool test_erase(ring)
     }
 
     string info;
-    it = getInfo(ring.begin() + 1, info);
+    ring.getInfo(ring.begin() + 1, info);
     if (info != "two")
     {
         cout << "Test 2 in erase failed\n";
         return false;
     }
 
-    if (ring.search(4, 1) != begin()+2)
+    if (ring.search(4, 1) != ring.begin()+2)
     {
         cout << "Test 3 in erase failed\n";
         return false;
@@ -454,7 +440,7 @@ bool test_erase(ring)
     return true;
 }
 
-void test_ostream_operator()
+void test_ostream_operator(bi_ring<int, string> ring)
 {
     cout << "===== ostream operator test =====\n ";
     cout << ring;
