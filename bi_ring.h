@@ -3,6 +3,9 @@
 
 #include <iostream>
 #include <string>
+#include "bi_ring_test.h"
+
+using namespace std;
 
 template <typename Key, typename Info>
 class bi_ring // implemented as doubly linked list
@@ -18,79 +21,10 @@ private:
     Node *start; // front
     int size;
 
-    // class iterator_base // Base class for iterator and const_iterator
-    // {
-    // protected:
-    //     Node *owner;
-    //     explicit iterator_base(Node *start) : owner(start) {} // Explicit keyword prevents implicit conversion from Node* to iterator_base, like e.g. iterator_base it = start; - will not compile
-
-    // public:
-    //     iterator_base() : owner(nullptr) {}
-    //     iterator_base(const iterator_base &src) : owner(src.owner) {}
-    //     ~iterator_base() = default;
-
-    //     bool operator==(const iterator_base &other) const { return owner == other.owner; }
-    //     bool operator!=(const iterator_base &other) const { return owner != other.owner; }
-
-    //     iterator_base &operator++()
-    //     {
-    //         owner = owner->next;
-    //         return *this;
-    //     }
-    //     iterator_base operator++(int)
-    //     {
-    //         iterator_base temp = *this;
-    //         owner = owner->next;
-    //         return temp;
-    //     }
-    //     iterator_base &operator--()
-    //     {
-    //         owner = owner->previous;
-    //         return *this;
-    //     }
-    //     iterator_base operator--(int)
-    //     {
-    //         iterator_base temp = *this;
-    //         owner = owner->previous;
-    //         return temp;
-    //     }
-    //     iterator_base operator+(int n) const
-    //     {
-    //         iterator_base temp = *this;
-    //         for (int i = 0; i < n; i++)
-    //         {
-    //             temp.owner = temp.owner->next;
-    //         }
-    //         return temp;
-    //     }
-    //     iterator_base operator-(int n) const
-    //     {
-    //         iterator_base temp = *this;
-    //         for (int i = 0; i < n; i++)
-    //         {
-    //             temp.owner = temp.owner->previous;
-    //         }
-    //         return temp;
-    //     }
-    //     iterator_base &operator+=(int n)
-    //     {
-    //         for (int i = 0; i < n; i++)
-    //         {
-    //             owner = owner->next;
-    //         }
-    //         return *this;
-    //     }
-    //     iterator_base &operator-=(int n)
-    //     {
-    //         for (int i = 0; i < n; i++)
-    //         {
-    //             owner = owner->previous;
-    //         }
-    //         return *this;
-    //     }
-    // };
-
 public:
+    class iterator;
+    class const_iterator;
+    
     class iterator
     {
     private:
@@ -545,4 +479,4 @@ public:
     iterator begin() const { return iterator(start); }
 };
 
-#endif // BI_RING_H
+#endif

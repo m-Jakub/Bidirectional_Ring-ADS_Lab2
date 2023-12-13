@@ -2,12 +2,13 @@
 #define BI_RING_TEST_H
 
 #include "bi_ring.h"
-#include "bi_ring_test.cpp"
 #include <iostream>
 
+using namespace std;
 
 // fills the ring with some values to prepare it for further tests
 // that's why this function receives a reference to the ring
+
 void fill_the_initial_ring(bi_ring<int, string>&);
 
 // other tests receive a copy of the ring
@@ -31,4 +32,4 @@ bool test_clear(bi_ring<int, string>);
 
 void test_ostream_operator(bi_ring<int, string>);
 
-#endif // BI_RING_TEST_H
+#endif

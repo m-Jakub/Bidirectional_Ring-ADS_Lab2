@@ -6,6 +6,7 @@
 
 using namespace std;
 
+
 void fill_the_initial_ring(bi_ring<int, string> &ring)
 {
     ring.push_back(1, "one");
