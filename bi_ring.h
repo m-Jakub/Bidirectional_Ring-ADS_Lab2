@@ -485,32 +485,43 @@ public:
     iterator begin() const { return iterator(start); }
 };
 
-// template <typename Key, typename Info>
-// bi_ring<Key, Info> unique(const bi_ring<Key, Info> &source, Info(aggregate)(const Key &, const Info &, const Info &))
-// {
-//     bi_ring<Key, Info> result;
-//     if (source.getSize() == 0)
-//         return result;
+string concatenate(const int &key, const string &info1, const string &info2)
+{
+    return info1 + "-" + info2;
+}
 
-//     else
-//     {
-//         typename bi_ring<Key, Info>::const_iterator it = source.begin();
-//         result.push_back(it->key, it->info);
-//         while (++it != source.begin())
-//         {
-//             if (it->key == result.start->previous->key)
-//             {
-//                 result.start->previous->info = aggregate(it->key, it->info, result.start->previous->info);
-//             }
-//             else
-//             {
-//                 result.push_back(it->key, it->info);
-//             }
-//         }
-//         return result;
-//     }
-// }
-// // source => [one: uno, two : due, three : tre, one : eins, two : zwei,
+template <typename Key, typename Info>
+bi_ring<Key, Info> unique(const bi_ring<Key, Info> source, Info(aggregate)(const Key &, const Info &, const Info &))
+{
+    bi_ring<Key, Info> result;
+    if (source.getSize() == 0)
+        return result;
+    else
+    {
+        typename bi_ring<Key, Info>::const_iterator it = source.begin();
+        result.push_back(it->key, it->info);
+        while (++it != source.begin())
+        {
+            typename bi_ring<Key, Info>::const_iterator it2 = source.begin();
+            typename bi_ring<Key, Info>::iterator itResult = result.begin();
+            while (it2 != it)
+            {
+                if (it->key == it2->key)
+                {
+                    result.insert(itResult, it->key, aggregate(it->key, it->info, it2->info));
+                    result.erase(itResult);
+                    break;
+                }
+                it2++;
+                itResult++;
+            }
+            if (it2 == it)
+                result.push_back(it->key, it->info);
+        }
+        return result;
+    }
+}
+// source => [one: uno, two : due, three : tre, one : eins, two : zwei,
 //   three : drei, four : vier, five : cinque, six : sechs,
 //    seven : sieben, acht : otto ]
 //

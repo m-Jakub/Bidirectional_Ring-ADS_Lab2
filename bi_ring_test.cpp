@@ -447,6 +447,24 @@ void test_ostream_operator(bi_ring<int, string> ring)
     cout << ring;
 }
 
+bool test_unique(bi_ring<int, string> ring)
+{
+    cout << "===== unique test =====\n";
+
+    ring.insert(ring.begin(), 4, "cztery");
+    ring.push_back(2, "dwa");
+
+    cout << "\nRing before using unique function: " << endl;
+    ring.print(); // 1 one 4 cztery 2 two 3 three 4 four 5 five 2 dwa
+
+    bi_ring<int, string> result = unique(ring, concatenate);
+
+    cout << "\nRing after using unique function: " << endl;
+    result.print(); // 1 one 4 cztery-four 2 two-dwa 3 three 5 five
+
+    return true;
+}
+
 bool test_split(bi_ring<int, string> ring)
 {
     cout << "===== split test =====\n";
@@ -509,7 +527,7 @@ bool test_split(bi_ring<int, string> ring)
         }
     }
 
-    cout << "\nresult after splitting: " << endl;
+    cout << "Result after splitting: " << endl;
     cout << "[\n" << result[0] << "]," << endl;
     cout << "[\n" << result[1] << "]," << endl;
     cout << "[\n" << result[2] << "]" << endl;
@@ -542,6 +560,7 @@ int main()
 
     test_ostream_operator(ring);
 
+    assert(test_unique(ring));
     assert(test_split(ring));
 
     cout << "\n\nAll tests passed\n";

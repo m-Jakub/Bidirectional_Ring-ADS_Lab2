@@ -31,6 +31,7 @@ bool test_erase(bi_ring<int, string>);
 
 void test_ostream_operator(bi_ring<int, string>);
 
+bool test_unique(bi_ring<int, string>);
 bool test_split(bi_ring<int, string>);
 
 #endif
