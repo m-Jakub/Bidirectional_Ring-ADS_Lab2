@@ -216,12 +216,14 @@ public:
         }
         else
         {
+            clear();
             Node *temp = src.start;
-            while (temp != src.start)
+            while (temp->next != src.start)
             {
                 push_back(temp->key, temp->info);
                 temp = temp->next;
             }
+            push_back(temp->key, temp->info);
             size = src.size;
         }
     }
@@ -415,10 +417,11 @@ public:
 
         else
         {
-            Node *temp = position->next;
+            Node *toDelete = position->next;
+            Node *temp = position->next->previous;
             position->previous->next = position->next;
             position->next->previous = position->previous;
-            delete *position;
+            delete toDelete;
             size--;
             return iterator(temp);
         }

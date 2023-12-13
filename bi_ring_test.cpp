@@ -1,11 +1,9 @@
-#include "bi_ring.h"
 #include "bi_ring_test.h"
 #include <iostream>
 #include <cassert>
 #include <string>
 
 using namespace std;
-
 
 void fill_the_initial_ring(bi_ring<int, string> &ring)
 {
@@ -34,7 +32,8 @@ bool test_copy_constructor(bi_ring<int, string> ring)
 }
 bool test_assignment_operator(bi_ring<int, string> ring)
 {
-    bi_ring<int, string> ring_copy = ring;
+    bi_ring<int, string> ring_copy;
+    ring_copy = ring;
 
     cout << "===== Assignment operator test =====\n ";
     ring_copy.print();
@@ -221,7 +220,7 @@ bool test_push_front(bi_ring<int, string> ring)
     ring.push_front(2, "dwa");
     ring.push_front(7, "siedem");
 
-        ring.print();
+    ring.print();
 
     if (ring.getSize() != 9)
     {
@@ -433,12 +432,12 @@ bool test_erase(bi_ring<int, string> ring)
         return false;
     }
 
-    if (ring.search(4, 1) != ring.begin()+2)
+    if (ring.search(4, 1) != ring.begin() + 2)
     {
         cout << "Test 3 in erase failed\n";
         return false;
     }
-    
+
     return true;
 }
 
@@ -457,7 +456,7 @@ int main()
 
     assert(test_copy_constructor(ring));
     assert(test_assignment_operator(ring));
-    
+
     assert(test_getInfo(ring));
     assert(test_search(ring));
 
@@ -472,7 +471,7 @@ int main()
     assert(test_erase(ring));
 
     test_ostream_operator(ring);
-   
+
     cout << "\n\nAll tests passed\n";
     return 0;
 }
