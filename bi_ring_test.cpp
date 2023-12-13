@@ -54,35 +54,35 @@ bool test_getInfo(bi_ring<int, string> ring) // tests getInfo() method
     string info;
 
     ring.getInfo(it, info);
-    if (info != "One")
+    if (info != "one")
     {
         cout << "Test 1 in getInfo failed\n";
         return false;
     }
 
     ring.getInfo(it += 2, info);
-    if (info != "Three")
+    if (info != "three")
     {
         cout << "Test 2 in getInfo failed\n";
         return false;
     }
 
     ring.getInfo(--it, info);
-    if (info != "Two")
+    if (info != "two")
     {
         cout << "Test 3 in getInfo failed\n";
         return false;
     }
 
     ring.getInfo(it++, info);
-    if (info != "Two")
+    if (info != "two")
     {
         cout << "Test 4 in getInfo failed\n";
         return false;
     }
 
     ring.getInfo(it -= 18, info);
-    if (info != "Five")
+    if (info != "five")
     {
         cout << "Test 5 in getInfo failed\n";
         return false;

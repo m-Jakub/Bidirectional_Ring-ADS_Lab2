@@ -223,7 +223,6 @@ public:
                 temp = temp->next;
             }
             push_back(temp->key, temp->info);
-            size = src.size;
         }
     }
     ~bi_ring() {}
@@ -250,7 +249,6 @@ public:
                     temp = temp->next;
                 }
                 push_back(temp->key, temp->info);
-                size = src.size;
             }
             return *this;
         }
@@ -417,12 +415,14 @@ public:
 
         else
         {
-            Node *toDelete = position->next;
-            Node *temp = position->next->previous;
+            Node *temp = position->next;
+            Node *toDelete = position->next->previous;
             position->previous->next = position->next;
             position->next->previous = position->previous;
             delete toDelete;
             size--;
+            if (size == 0)
+                return iterator();
             return iterator(temp);
         }
     }
@@ -433,15 +433,12 @@ public:
 
         else
         {
-            Node *temp = start;
-            while (temp->next != start)
+            iterator it = begin();
+
+            while (it != iterator())
             {
-                temp = temp->next;
-                delete temp->previous;
+                it = erase(it);
             }
-            delete temp;
-            start = nullptr;
-            size = 0;
         }
     }
 
