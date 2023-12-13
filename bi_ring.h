@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include "bi_ring_test.h"
+#include <vector>
 
 using namespace std;
 
@@ -41,6 +42,8 @@ public:
 
         bool operator==(const iterator &other) const { return owner == other.owner; }
         bool operator!=(const iterator &other) const { return owner != other.owner; }
+        bool operator==(const const_iterator &other) const { return owner == other.owner; }
+        bool operator!=(const const_iterator &other) const { return owner != other.owner; }
 
         iterator &operator++()
         {
@@ -129,6 +132,8 @@ public:
 
         bool operator==(const const_iterator &other) const { return owner == other.owner; }
         bool operator!=(const const_iterator &other) const { return owner != other.owner; }
+        bool operator==(const iterator &other) const { return owner == other.owner; }
+        bool operator!=(const iterator &other) const { return owner != other.owner; }
 
         const_iterator &operator++()
         {
@@ -479,5 +484,89 @@ public:
 
     iterator begin() const { return iterator(start); }
 };
+
+// template <typename Key, typename Info>
+// bi_ring<Key, Info> unique(const bi_ring<Key, Info> &source, Info(aggregate)(const Key &, const Info &, const Info &))
+// {
+//     bi_ring<Key, Info> result;
+//     if (source.getSize() == 0)
+//         return result;
+
+//     else
+//     {
+//         typename bi_ring<Key, Info>::const_iterator it = source.begin();
+//         result.push_back(it->key, it->info);
+//         while (++it != source.begin())
+//         {
+//             if (it->key == result.start->previous->key)
+//             {
+//                 result.start->previous->info = aggregate(it->key, it->info, result.start->previous->info);
+//             }
+//             else
+//             {
+//                 result.push_back(it->key, it->info);
+//             }
+//         }
+//         return result;
+//     }
+// }
+// // source => [one: uno, two : due, three : tre, one : eins, two : zwei,
+//   three : drei, four : vier, five : cinque, six : sechs,
+//    seven : sieben, acht : otto ]
+//
+// unique<std::string, std::string>(src,
+// [](const std::string&, const std::string& i1, const std::string& i2)
+// {
+//  return i1 + "-" + i2;
+// }
+//);
+//
+// =>
+// [ one : uno-eins, two : due-zwei, three : tre-drei,
+// four : vier, five : cinque, six : sechs, seven : sieben, acht : otto ]
+
+// Write a function template which splits a source bi_ring collection a series of new bi_ring(s) in which key members are nondecreasing
+template <typename Key, typename Info>
+vector<bi_ring<Key, Info>> split(const bi_ring<Key, Info> &source)
+{
+    vector<bi_ring<Key, Info>> result;
+    if (source.getSize() == 0)
+        return result;
+
+    else
+    {
+        bi_ring<Key, Info> temp;
+        temp.push_back(source.begin()->key, source.begin()->info);
+        typename bi_ring<Key, Info>::const_iterator it = source.begin();
+
+        while (++it != source.begin())
+        {
+            if (it->key >= (it - 1)->key)
+                temp.push_back(it->key, it->info);
+
+            else
+            {
+                result.push_back(temp);
+                temp.clear();
+                temp.push_back(it->key, it->info);
+            }
+        }
+
+        if (!temp.isEmpty())
+            result.push_back(temp);
+
+        return result;
+    }
+}
+
+// source => [uno:1, due:2, tre:3, quattro:4, cinque:5, sei:6, sette:7, otto:8]
+//
+// auto result = split<string, int>(source);
+//
+// result -> [  [uno:1],
+//              [due:2, tre:3],
+//              [quattro:4],
+//              [cinque:5, sei:6, sette:7],
+//              [otto:8] ]
 
 #endif

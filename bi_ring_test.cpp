@@ -12,7 +12,7 @@ void fill_the_initial_ring(bi_ring<int, string> &ring)
     ring.push_back(3, "three");
     ring.push_back(4, "four");
     ring.push_back(5, "five");
-    cout << "===== Initial ring =====\n ";
+    cout << "===== Initial ring =====\n";
     ring.print();
 }
 
@@ -20,7 +20,7 @@ bool test_copy_constructor(bi_ring<int, string> ring)
 {
     bi_ring<int, string> ring_copy(ring);
 
-    cout << "===== Copy constructor test =====\n ";
+    cout << "===== Copy constructor test =====\n";
     ring_copy.print();
 
     if (ring_copy.getSize() != ring.getSize())
@@ -35,7 +35,7 @@ bool test_assignment_operator(bi_ring<int, string> ring)
     bi_ring<int, string> ring_copy;
     ring_copy = ring;
 
-    cout << "===== Assignment operator test =====\n ";
+    cout << "===== Assignment operator test =====\n";
     ring_copy.print();
 
     if (ring_copy.getSize() != ring.getSize())
@@ -48,7 +48,7 @@ bool test_assignment_operator(bi_ring<int, string> ring)
 
 bool test_getInfo(bi_ring<int, string> ring) // tests getInfo() method
 {
-    cout << "===== getInfo test =====\n ";
+    cout << "===== getInfo test =====\n";
 
     bi_ring<int, string>::iterator it = ring.begin();
     string info;
@@ -92,7 +92,7 @@ bool test_getInfo(bi_ring<int, string> ring) // tests getInfo() method
 }
 bool test_search(bi_ring<int, string> ring)
 {
-    cout << "===== search test =====\n ";
+    cout << "===== search test =====\n";
 
     bi_ring<int, string>::iterator it = ring.begin();
 
@@ -140,7 +140,7 @@ bool test_search(bi_ring<int, string> ring)
 
 bool test_getSize(bi_ring<int, string> ring)
 {
-    cout << "===== getSize test =====\n ";
+    cout << "===== getSize test =====\n";
 
     if (ring.getSize() != 5)
     {
@@ -180,7 +180,7 @@ bool test_getSize(bi_ring<int, string> ring)
 }
 bool test_isEmptyAndClear(bi_ring<int, string> ring)
 {
-    cout << "===== isEmpty and clear test =====\n ";
+    cout << "===== isEmpty and clear test =====\n";
 
     if (ring.isEmpty() != false)
     {
@@ -214,7 +214,7 @@ bool test_isEmptyAndClear(bi_ring<int, string> ring)
 
 bool test_push_front(bi_ring<int, string> ring)
 {
-    cout << "===== push_front test =====\n ";
+    cout << "===== push_front test =====\n";
     ring.push_front(6, "six");
     ring.push_front(7, "seven");
     ring.push_front(2, "dwa");
@@ -260,12 +260,12 @@ bool test_push_front(bi_ring<int, string> ring)
 }
 bool test_push_back(bi_ring<int, string> ring)
 {
-    cout << "===== push_back test =====\n ";
+    cout << "===== push_back test =====\n";
     ring.push_back(18, "eighteen");
     ring.push_back(19, "nineteen");
-    ring.push_back(14, "czternaście");
-    ring.push_back(19, "dziewiętnaście");
-    ring.push_back(19, "dziewiętnaście");
+    ring.push_back(14, "czternascie");
+    ring.push_back(19, "dziewietnascie");
+    ring.push_back(19, "dziewietnascie");
 
     ring.print();
 
@@ -307,7 +307,7 @@ bool test_push_back(bi_ring<int, string> ring)
 }
 bool test_pop_front(bi_ring<int, string> ring)
 {
-    cout << "===== pop_front test =====\n ";
+    cout << "===== pop_front test =====\n";
     ring.pop_front();
 
     if (ring.getSize() != 4)
@@ -343,7 +343,7 @@ bool test_pop_front(bi_ring<int, string> ring)
 }
 bool test_pop_back(bi_ring<int, string> ring)
 {
-    cout << "===== pop_back test =====\n ";
+    cout << "===== pop_back test =====\n";
     ring.pop_back();
 
     if (ring.getSize() != 4)
@@ -379,8 +379,8 @@ bool test_pop_back(bi_ring<int, string> ring)
 }
 bool test_insert(bi_ring<int, string> ring)
 {
-    cout << "===== insert test =====\n ";
-    bi_ring<int, string>::iterator it;
+    cout << "===== insert test =====\n";
+    bi_ring<int, string>::iterator it = ring.begin();
     it = ring.insert(it, 1, "jeden");
     it = ring.insert(it - 1, 2, "dwa");
     it = ring.insert(it + 2, 3, "three");
@@ -411,7 +411,7 @@ bool test_insert(bi_ring<int, string> ring)
 }
 bool test_erase(bi_ring<int, string> ring)
 {
-    cout << "===== erase test =====\n ";
+    cout << "===== erase test =====\n";
     bi_ring<int, string>::iterator it;
     it = ring.erase(ring.begin() + 2);
     it = ring.erase(it + 1);
@@ -443,8 +443,78 @@ bool test_erase(bi_ring<int, string> ring)
 
 void test_ostream_operator(bi_ring<int, string> ring)
 {
-    cout << "===== ostream operator test =====\n ";
+    cout << "===== ostream operator test =====\n";
     cout << ring;
+}
+
+bool test_split(bi_ring<int, string> ring)
+{
+    cout << "===== split test =====\n";
+
+    ring.insert(ring.begin(), 5, "five");
+    ring.insert(ring.begin() + 3, 6, "six");
+
+    // Expected result: [ [one:1, five:5]
+    //                    [two:2, three:3, six:6]
+    //                    [four:4, five:5] ]
+
+    cout << "\nring before splitting: " << endl;
+    cout << ring << endl;
+
+    vector<bi_ring<int, string>> expected_result;
+    bi_ring<int, string> temp;
+
+    temp.push_back(1, "one");
+    temp.push_back(5, "five");
+    expected_result.push_back(temp);
+    temp.clear();
+
+    temp.push_back(2, "two");
+    temp.push_back(3, "three");
+    temp.push_back(6, "six");
+    expected_result.push_back(temp);
+    temp.clear();
+
+    temp.push_back(4, "four");
+    temp.push_back(5, "five");
+    expected_result.push_back(temp);
+    temp.clear();
+
+    auto result = split<int, string>(ring);
+
+    if (result.size() != expected_result.size())
+    {
+        cout << "Size test in split failed\n";
+        return false;
+    }
+
+    bi_ring<int, string> result_bi_ring;
+    bi_ring<int, string> expected_bi_ring;
+
+    for (int i = 0; i < result.size(); i++)
+    {
+        result_bi_ring = result[i];
+        expected_bi_ring = expected_result[i];
+        bi_ring<int, string>::const_iterator it1 = result_bi_ring.begin();
+        bi_ring<int, string>::const_iterator it2 = expected_bi_ring.begin();
+        for (int i = 0; i < result_bi_ring.getSize(); i++)
+        {
+            if (it1->key != it2->key || it1->info != it2->info)
+            {
+                cout << "Test split failed\n";
+                return false;
+            }
+            it1++;
+            it2++;
+        }
+    }
+
+    cout << "\nresult after splitting: " << endl;
+    cout << "[\n" << result[0] << "]," << endl;
+    cout << "[\n" << result[1] << "]," << endl;
+    cout << "[\n" << result[2] << "]" << endl;
+
+    return true;
 }
 
 int main()
@@ -471,6 +541,8 @@ int main()
     assert(test_erase(ring));
 
     test_ostream_operator(ring);
+
+    assert(test_split(ring));
 
     cout << "\n\nAll tests passed\n";
     return 0;
